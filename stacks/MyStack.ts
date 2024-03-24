@@ -8,8 +8,8 @@ export function API({ stack }: StackContext) {
     routes: {
       "GET /": "packages/functions/src/lambda.handler",
       "GET /cars": "packages/functions/src/cars.handler",
+      "GET /cars/{id}": "packages/functions/src/cars.handler",
       "POST /cars": "packages/functions/src/cars.handler",
-      
     },
   });
 
