@@ -1,0 +1,7 @@
+add react router
+make the current homepage /inventory page
+create listing
+remove listing
+
+
+finance calculator /finance
