@@ -16,7 +16,7 @@ export default function Cars() {
   }, []);
   
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6">
       {cars && cars.length > 0 && cars.map((car:any, i:number) => (
         <div key={i} className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="aspect-div overflow-hidden">
