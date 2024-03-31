@@ -6,14 +6,7 @@ import Search from "../components/Search.tsx"
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 
 function App() {
-  const [message, setMessage] = useState("Hi 👋");
   const { isAuthenticated } = useKindeAuth();
-
-  async function onClick() {
-    const res = await fetch(import.meta.env.VITE_APP_API_URL);
-    const data = await res.json();
-    setMessage(data.message);
-  }
 
   return (
     <div>
