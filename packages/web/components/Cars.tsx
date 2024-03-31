@@ -23,7 +23,7 @@ export default function Cars() {
             <img
               alt={car.Model}
               className="object-cover w-full h-full aspect-none"
-              src={car.imageSrc || "/placeholder.svg"}
+              src={car.imageSrc || "/mazda3.png"}
             />
           </div>
           <div className="p-4">
