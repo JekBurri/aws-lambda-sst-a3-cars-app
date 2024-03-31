@@ -1,10 +1,13 @@
 import { useState } from "react";
-import Cars from "../components/Cars.jsx";
+import Cars from "../components/Cars.tsx";
+import Landing from "../components/Landing.tsx";
+import Header from "../components/Header.tsx";
+import Search from "../components/Search.tsx"
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 
 function App() {
   const [message, setMessage] = useState("Hi 👋");
-  const { isAuthenticated, login, register } = useKindeAuth();
+  const { isAuthenticated } = useKindeAuth();
 
   async function onClick() {
     const res = await fetch(import.meta.env.VITE_APP_API_URL);
@@ -13,26 +16,19 @@ function App() {
   }
 
   return (
-    <>
+    <div>
       {isAuthenticated ? (
-        <div>
-          <button onClick={onClick}>
-            Message is "<i>{message}</i>"
-          </button>
-          <Cars />
-        </div>
-      ) : (
         <>
-          <button onClick={() => login()} type="button">
-            Sign In
-          </button>
-          <p>Don't have an account yet?</p>
-          <button onClick={() => register()} type="button">
-            Sign up
-          </button>
+          <Header />
+          <div className="w-full m-auto md:w-1/2">
+            <Search />
+            <Cars />
+          </div>
         </>
+      ) : (
+        <Landing />
       )}
-    </>
+    </div>
   );
 }
 
