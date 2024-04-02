@@ -54,22 +54,26 @@ app.get("/cars", async (c) => {
 });
 
 // Handler for POST /cars
+// Handler for POST /cars
 app.post("/cars", async (c) => {
   try {
-    const requestBody = await c.req.parseBody();
-    
+    const requestBody = await c.req.json(); // Parse JSON from the request body
+
     // Generate a UUID for CarId
     const carId = uuidv4();
-    
-    // Add the generated CarId to the item
+
+    // Add the generated CarId and S3 image URL to the item
     const newItem = {
       CarId: carId,
+      Color: requestBody.Color,
       Make: requestBody.Make,
       Model: requestBody.Model,
+      Price: requestBody.Price,
       Year: requestBody.Year,
-      Color: requestBody.Color
+      ImageSrc: requestBody.ImageUrl, // Use the provided ImageUrl from the request
+      UserId: requestBody.UserId,
     };
-    
+
     // Send the item to DynamoDB
     await dynamo.send(
       new PutCommand({
@@ -77,12 +81,13 @@ app.post("/cars", async (c) => {
         Item: newItem,
       })
     );
-    
+
     return c.json({ message: "Car created successfully", car: newItem });
   } catch (error) {
     console.error("Error creating car:", error);
     return c.json({ message: "Internal server error" }, 500);
   }
 });
+
 
 export const handler = handle(app);
