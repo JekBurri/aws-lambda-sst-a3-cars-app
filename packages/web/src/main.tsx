@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { KindeProvider } from "@kinde-oss/kinde-auth-react";
+import { BrowserRouter } from "react-router-dom";
+
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -12,7 +14,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       redirectUri={window.location.origin}
       logoutUri={window.location.origin}
     >
-      <App />
+      <BrowserRouter>
+        <App  />
+      </BrowserRouter>
     </KindeProvider>
   </React.StrictMode>
 );
+
+
+   
