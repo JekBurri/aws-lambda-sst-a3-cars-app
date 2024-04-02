@@ -10,6 +10,7 @@ export function API({ stack }: StackContext) {
       "GET /cars": "packages/functions/src/cars.handler",
       "GET /cars/{id}": "packages/functions/src/cars.handler",
       "POST /cars": "packages/functions/src/cars.handler",
+      "POST /cars/delete": "packages/functions/src/cars.handler",
     },
   });
 
