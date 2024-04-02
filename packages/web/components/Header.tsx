@@ -6,13 +6,13 @@ export default function Header() {
   const { getUser, logout } = useKindeAuth();
 
   return (
-    <div className="flex flex-col h-20 w-full shrink-0 border-b items-center px-4 md:px-6 mb-12">
-      <div className="flex items-center w-full gap-4 py-2">
+    <div className="flex h-auto w-full shrink-0 border-b items-center px-4 md:px-6 mb-12 sm:h-20">
+      <div className="flex flex-col items-center w-full gap-4 py-2 sm:flex-row sm:justify-center sm:align-middle">
         <button className="flex items-center h-10 text-lg font-semibold md:ml-[-10px]">
           <FlagIcon className="h-6 w-6" />
-          <span className="sr-only">Acme Inc</span>
+          <span className="">BuynRide</span>
         </button>
-        <nav className="ml-auto flex flex-1 items-center gap-4">
+        <nav className="m-auto flex flex-1 items-center gap-4 sm:ml-auto">
           <Link to={"/"} className="font-medium text-sm tracking-wide hover:underline">
             Home
           </Link>
@@ -29,9 +29,9 @@ export default function Header() {
             Contact
           </Link>
         </nav>
-        <div className="flex items-center gap-2 ml-auto">
+        <div className="flex items-center gap-2 m-auto sm:ml-auto">
           <div className="flex flex-col">
-            <p className="text-center text-md">{getUser().given_name}</p>
+            <p className="text-center font-bold text-lg">{getUser().given_name}</p>
             <button
               className="text-xs text-right underline"
               onClick={() => logout()}
@@ -40,14 +40,14 @@ export default function Header() {
             </button>
 
           </div>
-          <div className="h-8 w-8">
+          <div className="h-14 w-14">
             <img
               alt="Avatar"
-              className="rounded-full border overflow-hidden ring-1 ring-gray-200 dark:ring-gray-800"
-              height={12}
-              src="/vite.svg"
+              className="rounded-full border overflow-hidden"
+              height={20}
+              src="/profile.png"
               style={{
-                aspectRatio: "32/32",
+                aspectRatio: "64/64",
                 objectFit: "cover",
               }}
               
