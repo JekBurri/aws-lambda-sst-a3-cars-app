@@ -5,6 +5,8 @@ import Home from "../components/Home.tsx"
 import Header from "../components/Header.tsx";
 import Search from "../components/Search.tsx"
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
+import { Routes, Route } from "react-router-dom";
+
 
 function App() {
   const { isAuthenticated } = useKindeAuth();
@@ -15,8 +17,11 @@ function App() {
         <>
           <Header />
           <div className="w-full m-auto md:w-1/2">
-            <Search />
-            <Cars />
+            <Routes>
+                <Route index element={<Home />} />
+                <Route path="inventory" element={<><Search /><Cars /></>} />
+                <Route path="contact" element={<p>contact</p>} />              
+            </Routes>
           </div>
         </>
       ) : (
