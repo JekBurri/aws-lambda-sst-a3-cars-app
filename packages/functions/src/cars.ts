@@ -18,27 +18,51 @@ const tableName = "Cars";
 const app = new Hono();
 
 // Handler for GET /cars/{id}
-app.get("/cars/:id", async (c) => {
+app.get("/cars", async (c) => {
   try {
-    const id = c.req.param('id'); // Access the parameter directly from req.params
-    console.log("Requested CarId:", id); // Add this line for logging
-    const { Item } = await dynamo.send(
-      new GetCommand({
-        TableName: tableName,
-        Key: {
-          CarId: id,
-        },
-      })
-    );
-    if (!Item) {
-      return c.json({ message: "Car not found" }, 404);
+    const id = c.req.query('id'); // Get CarId from query params
+    const userId = c.req.query('userId'); // Get userId from query params
+    
+    if (id) {
+      console.log("Requested CarId:", id); // Add this line for logging
+      const { Item } = await dynamo.send(
+        new GetCommand({
+          TableName: tableName,
+          Key: {
+            CarId: id,
+          },
+        })
+      );
+      if (!Item) {
+        return c.json({ message: "Car not found" }, 404);
+      }
+      return c.json({ car: Item });
+    } else if (userId) {
+      console.log("Requested cars for UserId:", userId); // Add this line for logging
+      const { Items } = await dynamo.send(
+        new ScanCommand({
+          TableName: tableName,
+          FilterExpression: 'UserId = :userId',
+          ExpressionAttributeValues: {
+            ':userId': userId,
+          },
+        })
+      );
+      return c.json({ cars: Items });
+    } else {
+      console.log("Requested all cars"); // Add this line for logging
+      const { Items } = await dynamo.send(
+        new ScanCommand({ TableName: tableName })
+      );
+      return c.json({ cars: Items });
     }
-    return c.json({ car: Item });
   } catch (error) {
-    console.error("Error retrieving car:", error);
+    console.error("Error retrieving cars:", error);
     return c.json({ message: "Internal server error" }, 500);
   }
 });
+
+
 
 // Handler for GET /cars
 app.get("/cars", async (c) => {
@@ -88,6 +112,36 @@ app.post("/cars", async (c) => {
     return c.json({ message: "Internal server error" }, 500);
   }
 });
+
+// Handler for POST /api/cars/delete
+app.post("/cars/delete", async (c) => {
+  try {
+    const requestBody = await c.req.json(); // Parse JSON from the request body
+    const id = requestBody.CarId; // Extract the ID from the request body
+
+    // Check if the ID is provided
+    if (!id) {
+      return c.json({ message: "Car ID not provided" }, 400);
+    }
+
+    // Delete the car listing from the database
+    await dynamo.send(
+      new DeleteCommand({
+        TableName: tableName,
+        Key: {
+          CarId: id,
+        },
+      })
+    );
+
+    return c.json({ message: "Car listing deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting car listing:", error);
+    return c.json({ message: "Internal server error" }, 500);
+  }
+});
+
+
 
 
 export const handler = handle(app);
