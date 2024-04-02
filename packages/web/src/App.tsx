@@ -2,6 +2,7 @@
 import Cars from "../components/Cars.tsx";
 import Landing from "../components/Landing.tsx";
 import Home from "../components/Home.tsx"
+import Finance from "../components/Finance.tsx";
 import Header from "../components/Header.tsx";
 import Search from "../components/Search.tsx"
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
@@ -20,6 +21,7 @@ function App() {
             <Routes>
                 <Route index element={<Home />} />
                 <Route path="inventory" element={<><Search /><Cars /></>} />
+                <Route path="finance" element={<Finance />} />
                 <Route path="contact" element={<p>contact</p>} />              
             </Routes>
           </div>
