@@ -2,8 +2,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
+
 
 export default function Cars() {
+  const { isAuthenticated, getUser } = useKindeAuth();
+
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false); // State to toggle form display
@@ -28,9 +32,32 @@ export default function Cars() {
   };
 
   const handleSubmit = (e: any) => {
-    e.preventDefault();
-    console.log("Form submitted");
-  };
+    if(isAuthenticated) {
+      e.preventDefault();
+      console.log("Form submitted");
+      // Create an object containing the data to send in the POST request
+      const formData = {
+          Make: carMake,
+          Model: carModel,
+          Year: carYear,
+          Color: carColor,
+          Price: carPrice,
+          ImageUrl: '', // Replace with the S3 URL of the uploaded image
+          UserId: getUser().id // Replace 'userId' with the actual user ID
+      };
+      // Send the POST request with the formData object
+      axios.post("/api/cars", formData)
+        .then(response => {
+          console.log("POST request successful", response.data);
+        })
+        .catch(error => {
+          console.error("Error making POST request:", error);
+        });
+    } else {
+      alert("You must be logged in to add a car listing");
+    }
+};
+
 
   useEffect(() => {
     axios
