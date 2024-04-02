@@ -19,6 +19,8 @@ export default function Cars() {
   const [carPrice, setCarPrice] = useState("");
   const [carTrim, setCarTrim] = useState("");
   const [uploadedImage, setUploadedImage] = useState<string | ArrayBuffer | null>(null);
+  
+
 
   const handleImageUpload = (event: any) => {
     const file = event.target.files[0];
