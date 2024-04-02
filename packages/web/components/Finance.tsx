@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import Swal from "sweetalert2";
+import { useState, useEffect } from "react";
+
 import "sweetalert2/dist/sweetalert2.css";
 import "./CarLoanCalculator.css";
 
@@ -74,49 +74,6 @@ const Finance = () => {
     } else {
       return 12;
     }
-  };
-
-  const saveConfiguration = () => {
-    const configuration = {
-      principal,
-      interestRate,
-      loanTerm,
-      downPayment,
-      tradeInValue,
-      paymentFrequency,
-    };
-    const data = JSON.stringify(configuration);
-    const blob = new Blob([data], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "car_loan_configuration.json";
-    link.click();
-  };
-
-  const loadConfiguration = (event: any) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const content = e?.target?.result;
-      //@ts-ignore
-      const configuration = JSON.parse(content);
-      setPrincipal(configuration.principal);
-      setInterestRate(configuration.interestRate);
-      setLoanTerm(configuration.loanTerm);
-      setDownPayment(configuration.downPayment);
-      setTradeInValue(configuration.tradeInValue);
-      setPaymentFrequency(configuration.paymentFrequency);
-      Swal.fire(
-        "Load Successful",
-        `Configuration from "${file.name}" loaded successfully.`,
-        "success"
-      ).then(() => {
-        calculateMonthlyPayment();
-      });
-      calculateMonthlyPayment()
-    };
-    reader.readAsText(file);
   };
 
   return (<>
@@ -229,7 +186,7 @@ const Finance = () => {
           <div className="button-container">
             {monthlyPayment > 0 ? (
               <div className="result">
-                {/* <h3>{rsultTitle}</h3> */}
+                <h3 className="text-black">{resultTitle}</h3>
                 <div className="payment-amount">${monthlyPayment}</div>
                 <div className="breakdown">
                   <div className="breakdown-item">

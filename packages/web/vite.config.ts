@@ -1,16 +1,20 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import envCompatible from 'vite-plugin-env-compatible';
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  server:{
-    proxy:{
+  plugins: [
+    react(),
+    envCompatible(), // Load environment variables
+  ],
+  server: {
+    proxy: {
       '/api': {
-        target: 'https://93gd5xa9m8.execute-api.us-west-2.amazonaws.com',
+        // Use the environment variable for the API target URL
+        target: process.env.VITE_APP_API_URL,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
-    }
-  }
-})
+    },
+  },
+});
