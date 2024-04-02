@@ -1,4 +1,5 @@
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
+import { Link } from "react-router-dom";
 
 export default function Home() {
     const { getUser } = useKindeAuth();
@@ -36,9 +37,9 @@ export default function Home() {
                     <button className="h-10 flex-1 bg-gray-500 hover:bg-gray-600 text-white p-2 rounded-md shadow-md transition duration-300 ease-in-out transform hover:-translate-y-1">
                         Manage My Favorites
                     </button>
-                    <button className="h-10 flex-1 bg-gray-500 hover:bg-gray-600 text-white p-2 rounded-md shadow-md transition duration-300 ease-in-out transform hover:-translate-y-1">
+                    <Link to={"/inventory"} className="flex align-middle justify-center h-10 flex-1 bg-gray-500 hover:bg-gray-600 text-white p-2 rounded-md shadow-md transition duration-300 ease-in-out transform hover:-translate-y-1">
                         Sell My Car
-                    </button>
+                    </Link>
                 </div>
             </div>
         </>
