@@ -1,4 +1,6 @@
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
+import { Link } from "react-router-dom";
+
 
 export default function Header() {
   const { getUser, logout } = useKindeAuth();
@@ -11,21 +13,21 @@ export default function Header() {
           <span className="sr-only">Acme Inc</span>
         </button>
         <nav className="ml-auto flex flex-1 items-center gap-4">
-          <button className="font-medium text-sm tracking-wide hover:underline">
+          <Link to={"/"} className="font-medium text-sm tracking-wide hover:underline">
             Home
-          </button>
-          <button className="font-medium text-sm tracking-wide hover:underline">
+          </Link>
+          <Link to={"/inventory"} className="font-medium text-sm tracking-wide hover:underline">
             Inventory
-          </button>
-          <button className="font-medium text-sm tracking-wide hover:underline">
+          </Link>
+          <Link to={"/finance"} className="font-medium text-sm tracking-wide hover:underline">
             Finance
-          </button>
-          <button className="font-medium text-sm tracking-wide hover:underline">
+          </Link>
+          <Link to={"/service"} className="font-medium text-sm tracking-wide hover:underline">
             Service
-          </button>
-          <button className="font-medium text-sm tracking-wide hover:underline">
+          </Link>
+          <Link to={"/contact"} className="font-medium text-sm tracking-wide hover:underline">
             Contact
-          </button>
+          </Link>
         </nav>
         <div className="flex items-center gap-2 ml-auto">
           <div className="flex flex-col">
