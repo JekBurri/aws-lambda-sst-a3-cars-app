@@ -48,7 +48,7 @@ export default function Cars() {
           UserId: getUser().id // Replace 'userId' with the actual user ID
       };
       // Send the POST request with the formData object
-      axios.post("/api/cars", formData)
+      axios.post(`${import.meta.env.VITE_APP_API_URL}/cars`, formData)
         .then(response => {
           console.log("POST request successful", response.data);
         })
@@ -63,7 +63,7 @@ export default function Cars() {
 
   useEffect(() => {
     axios
-      .get("/api/cars")
+      .get(`${import.meta.env.VITE_APP_API_URL}/cars`)
       .then((response) => {
         console.log(response.data.cars);
         setCars(response.data.cars);
