@@ -4,7 +4,6 @@ export default function Landing() {
 
     const { login, register } = useKindeAuth();
 
-
     return (
         <div className="flex items-center min-h-screen px-4 text-center md:px-6">
         <div className="mx-auto space-y-4">
