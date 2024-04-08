@@ -23,12 +23,12 @@ export default function Home() {
     console.log('deleting car with id: ', id)
     if (isAuthenticated) {
         axios
-        .post("/api/cars/delete", { CarId: id })
+        .post(`${import.meta.env.VITE_APP_API_URL}/cars/delete`, { CarId: id })
         .then((response) => {
           console.log(response.data);
       
           axios
-            .get(`/api/cars?userId=${getUser().id}`)
+            .get(`${import.meta.env.VITE_APP_API_URL}/cars?userId=${getUser().id}`)
             .then((response) => {
               setUserListings(response.data.cars);
               setLoading(false); // Set loading to false once data is fetched
@@ -55,7 +55,7 @@ export default function Home() {
       setTimeout(() => {
         // Fetch user listings based on user ID
         axios
-          .get(`/api/cars?userId=${getUser().id}`)
+          .get(`${import.meta.env.VITE_APP_API_URL}/cars?userId=${getUser().id}`)
           .then((response) => {
             setUserListings(response.data.cars);
             setLoading(false); // Set loading to false once data is fetched
@@ -79,9 +79,15 @@ export default function Home() {
           <div className="flex space-x-4">
             <div className="flex items-center space-x-2 text-sm transition duration-300 ease-in-out transform hover:-translate-y-1">
               <CarIcon className="w-4 h-4 opacity-50" />
-              <span className="font-semibold">
-                {userListings.length} Listings
-              </span>
+              {userListings ? (
+                <span className="font-semibold">
+                  {userListings.length || 0} Listings
+                </span>
+              ) : (
+                <span className="font-semibold">
+                  0 Listings
+                </span>
+              )}
             </div>
             <div className="flex items-center space-x-2 text-sm transition duration-300 ease-in-out transform hover:-translate-y-1">
               <HeartIcon className="w-4 h-4 opacity-50" />
@@ -112,7 +118,7 @@ export default function Home() {
               </>
             )}
 
-            {!loading &&
+            {!loading && userListings && 
               userListings.map((listing, index) => (
                 <div
                   key={index}
