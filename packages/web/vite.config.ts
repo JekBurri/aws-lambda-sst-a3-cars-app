@@ -1,20 +1,20 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import envCompatible from 'vite-plugin-env-compatible';
+import dotenv from 'dotenv';
 
-export default defineConfig({
-  plugins: [
-    react(),
-    envCompatible(), // Load environment variables
-  ],
-  server: {
-    proxy: {
-      '/api': {
-        // Use the environment variable for the API target URL
-        target: process.env.VITE_APP_API_URL,
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+dotenv.config({ path: `.env.production` });
+
+export default defineConfig(({ mode }) => {
+  return {
+    plugins: [react()],
+    server: {
+      proxy: {
+        '/api': {
+          target: 'http://localhost:3000',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+        },
       },
     },
-  },
+  };
 });
