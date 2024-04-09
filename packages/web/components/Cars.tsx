@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
+import CarColorPicker from "./CarColorPicker";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
-
+import Swal from "sweetalert2";
 
 export default function Cars() {
   const { isAuthenticated, getUser } = useKindeAuth();
@@ -16,6 +17,12 @@ export default function Cars() {
   const [carMake, setCarMake] = useState("");
   const [carModel, setCarModel] = useState("");
   const [carColor, setCarColor] = useState("");
+
+  // const [selectedColor, setSelectedColor] = useState("");
+  const handleColorChange = (color:string) => {
+    setCarColor(color);
+  };
+
   const [carPrice, setCarPrice] = useState("");
   const [carTrim, setCarTrim] = useState("");
   const [uploadedImage, setUploadedImage] = useState<string | ArrayBuffer | null>(null);
@@ -51,6 +58,13 @@ export default function Cars() {
       axios.post(`${import.meta.env.VITE_APP_API_URL}/cars`, formData)
         .then(response => {
           console.log("POST request successful", response.data);
+          Swal.fire({
+            title: "Car listing added successfully",
+            icon: "success",
+            showConfirmButton: false, 
+          });
+          setShowForm(false);
+          setTimeout(() => window.location.reload(), 1500);
         })
         .catch(error => {
           console.error("Error making POST request:", error);
@@ -143,7 +157,7 @@ export default function Cars() {
                 required
               />
             </div>
-            <div className="flex flex-row mb-4">
+            <div className="flex flex-col mb-4">
               <div className="flex flex-col mr-4 w-1/2">
                 <label
                   htmlFor="year"
@@ -164,7 +178,7 @@ export default function Cars() {
                   required
                 />
               </div>
-              <div className="flex flex-col w-1/2">
+              {/* <div className="flex flex-col w-1/2">
                 <label
                   htmlFor="color"
                   className="block text-sm font-medium text-gray-700 mb-1"
@@ -180,7 +194,9 @@ export default function Cars() {
                   onChange={(e) => setCarColor(e.target.value)}
                   required
                 />
-              </div>
+              </div> */}
+               <CarColorPicker onColorChange={handleColorChange} />
+                <p>Selected Color: {carColor}</p>
             </div>
             <div className="flex flex-row mb-4">
               <div className="flex flex-col w-1/2">

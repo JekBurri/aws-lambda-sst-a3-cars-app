@@ -2,6 +2,7 @@ import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
+import Swal from "sweetalert2";
 
 type Car = {
   CarId: string;
@@ -20,28 +21,51 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   const handleDelete = (id: string) => {
-    console.log('deleting car with id: ', id)
+    console.log("deleting car with id: ", id);
     if (isAuthenticated) {
-        axios
-        .post(`${import.meta.env.VITE_APP_API_URL}/cars/delete`, { CarId: id })
-        .then((response) => {
-          console.log(response.data);
-      
+      Swal.fire({
+        title: "Are you sure you want to delete your vehicle listing?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
           axios
-            .get(`${import.meta.env.VITE_APP_API_URL}/cars?userId=${getUser().id}`)
+            .post(`${import.meta.env.VITE_APP_API_URL}/cars/delete`, {
+              CarId: id,
+            })
             .then((response) => {
-              setUserListings(response.data.cars);
-              setLoading(false); // Set loading to false once data is fetched
+              console.log(response.data);
+
+              axios
+                .get(
+                  `${import.meta.env.VITE_APP_API_URL}/cars?userId=${
+                    getUser().id
+                  }`
+                )
+                .then((response) => {
+                  setUserListings(response.data.cars);
+                  setLoading(false); // Set loading to false once data is fetched
+                })
+                .catch((error) => {
+                  console.error("Error fetching user listings:", error);
+                  setLoading(false); // Set loading to false in case of an error
+                });
             })
             .catch((error) => {
-              console.error("Error fetching user listings:", error);
-              setLoading(false); // Set loading to false in case of an error
+              console.error("Error deleting user listing:", error);
             });
-        })
-        .catch((error) => {
-          console.error("Error deleting user listing:", error);
-        });
-      
+
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your vehicle listing has been deleted.",
+            icon: "success",
+          });
+        }
+      });
     } else {
       console.log("User not authenticated");
     }
@@ -55,7 +79,9 @@ export default function Home() {
       setTimeout(() => {
         // Fetch user listings based on user ID
         axios
-          .get(`${import.meta.env.VITE_APP_API_URL}/cars?userId=${getUser().id}`)
+          .get(
+            `${import.meta.env.VITE_APP_API_URL}/cars?userId=${getUser().id}`
+          )
           .then((response) => {
             setUserListings(response.data.cars);
             setLoading(false); // Set loading to false once data is fetched
@@ -84,9 +110,7 @@ export default function Home() {
                   {userListings.length || 0} Listings
                 </span>
               ) : (
-                <span className="font-semibold">
-                  0 Listings
-                </span>
+                <span className="font-semibold">0 Listings</span>
               )}
             </div>
             <div className="flex items-center space-x-2 text-sm transition duration-300 ease-in-out transform hover:-translate-y-1">
@@ -118,7 +142,8 @@ export default function Home() {
               </>
             )}
 
-            {!loading && userListings && 
+            {!loading &&
+              userListings &&
               userListings.map((listing, index) => (
                 <div
                   key={index}
@@ -143,7 +168,7 @@ export default function Home() {
                       Edit
                     </button>
                     <button
-                      onClick={()=>handleDelete(listing.CarId)}
+                      onClick={() => handleDelete(listing.CarId)}
                       className="px-2 bg-red-500 rounded-md text-white border-black border"
                     >
                       Delete
